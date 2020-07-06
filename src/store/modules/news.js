@@ -31,8 +31,7 @@ const getters = {};
 
 const actions = {
   async getAllNews({ commit }) {
-    // Axios.get("http://localhost:3000/news/")
-    Axios.get("http://localhost:8000/api/newsAPI")
+    Axios.get("http://localhost:8088/api/newsAPI")
       .then(response => commit("getAllNews", response.data))
       .catch(function(error) {
         if (error.response) {
@@ -50,8 +49,7 @@ const actions = {
   },
 
   getMyFav({ commit }) {
-    // Axios.get("http://localhost:3000/news/fav")
-    Axios.get("http://localhost:8000/api/new/")
+    Axios.get("http://localhost:8088/api/new/")
       .then(response => commit("getMyFav", response.data))
       .catch(function(error) {
         if (error.response) {
@@ -76,8 +74,7 @@ const actions = {
   },
 
   addToFav({ commit }, newData) {
-    // Axios.post("http://localhost:3000/news/save", newData)
-    Axios.post("http://localhost:8000/api/new/", newData)
+    Axios.post("http://localhost:8088/api/new/", newData)
       .then(response => {
         commit("addToFav", { savedData: response.data, newData });
         commit("showSnackBar", {
@@ -113,8 +110,7 @@ const actions = {
   },
 
   deleteFromFav({ commit }, newData) {
-    // Axios.delete(`http://localhost:3000/news/delete/${newData._id}`, newData)
-    Axios.delete(`http://localhost:8000/api/new/${newData.id}`)
+    Axios.delete(`http://localhost:8088/api/new/${newData.id}`)
       .then(() => {
         commit("deleteFromFav", newData);
         commit("showSnackBar", {

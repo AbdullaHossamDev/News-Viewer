@@ -1,5 +1,8 @@
 # news-app
 
+## Server project
+github: https://github.com/AbdullaHossamDev/News-Viewer-server
+
 ## Project setup
 ```
 npm install

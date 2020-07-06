@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="favorite">
     <div class="row">
       <div
         class="col-md-3 position-sticky ml-0 mr-0 position-relative"
@@ -8,27 +8,16 @@
         <welcome />
       </div>
       <div class="pt-5 pb-5 col-md-6">
-        <div v-for="(newData, index) in allNews" :key="index">
-          <newCard
-            :newData="newData"
-            :newDataId="newData.id"
-            :index="index"
-            :arrayName="'news'"
-            v-if="index < showedDataIndex"
-          />
-        </div>
-        <div class="w-50 m-auto">
-          <button
-            @click="increaseShowedNews"
-            class="btn btn-block btn-outline-secondary mb-1"
-            v-if="showedDataIndex <= allNews.length"
-          >
-            Seemore
-          </button>
-        </div>
+        <newCard
+          v-for="(newData, index) in favNews"
+          :newData="newData"
+          :newDataId="newData.id"
+          :key="index"
+          :index="index"
+        />
         <div
           class="loading base_page_color col-md-6 ml-0 mr-0"
-          v-if="news.news.length == 0"
+          v-if="news.favNews.length == 0"
         >
           <div class="spinner-border" role="status">
             <span class="sr-only">Loading...</span>
@@ -46,31 +35,29 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
 import newCard from "@/components/newCard";
+import { mapActions, mapState } from "vuex";
 import FilterNew from "@/components/FilterNew";
 import welcome from "@/components/welcome";
+import router from "@/router";
 export default {
-  name: "Home",
+  name: "favorite",
   data() {
     return {
-      showedDataIndex: 10,
+      showedDataIndex: -1,
       filterData: {}
     };
   },
   components: { newCard, FilterNew, welcome },
   methods: {
-    ...mapActions(["getAllNews"]),
+    ...mapActions(["getMyFav", "popupDisplay"]),
     filterNew(filterData) {
       this.filterData = filterData;
-    },
-    increaseShowedNews() {
-      this.showedDataIndex += 10;
     }
   },
   computed: {
     ...mapState(["news"]),
-    allNews() {
+    favNews() {
       let filterString = [];
       if (this.filterData.EG) {
         if (
@@ -118,20 +105,30 @@ export default {
         filterString.push("uaeSports");
       }
 
-      return this.news.news.filter(n => filterString.includes(n.type));
+      return this.news.favNews.filter(n => filterString.includes(n.type));
+    }
+  },
+  watch: {
+    favNews: {
+      immediate: true,
+      handler() {
+        setTimeout(() => {
+          if (this.favNews.length == 0) {
+            this.popupDisplay({
+              showPopupMSG: true,
+              msgType: "Warning",
+              msgText:
+                "Ooh you don't have any news in your favorite list, lets add more!"
+            });
+            router.push("/");
+          }
+        }, 3000);
+      },
+      deep: true
     }
   },
   mounted() {
-    this.getAllNews();
-  },
-  watch: {
-    // "news.news": {
-    //   immediate: true,
-    //   handler(newVal) {
-    //     console.log("news.news: gdeeeda hna", newVal);
-    //   },
-    //   deep: true
-    // }
+    this.getMyFav();
   }
 };
 </script>

@@ -1,32 +1,58 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
-  </div>
+  <v-app class="base_page_color">
+    <v-content class="mt-5 base_page_color">
+      <Header />
+      <div class=" mt-5">
+        <popupMessage
+          v-if="popupModel.showPopupMSG"
+          :dialog="popupModel.showPopupMSG"
+          :msgType="popupModel.msgType"
+          :msgText="popupModel.msgText"
+        />
+        <snackBar
+          v-if="snackBar.showSnackBar"
+          :snackbar="snackBar.showSnackBar"
+          :text="snackBar.text"
+          :timeout="snackBar.timeout"
+        />
+        <router-view />
+      </div>
+    </v-content>
+  </v-app>
 </template>
 
+<script>
+import { mapActions, mapState } from "vuex";
+import Header from "./components/Header";
+import popupMessage from "./components/popupMessage";
+import snackBar from "./components/snackBar";
+export default {
+  name: "App",
+  data() {
+    return {};
+  },
+  components: {
+    Header,
+    popupMessage,
+    snackBar
+  },
+  computed: {
+    ...mapState(["popupModel", "snackBar"])
+  },
+  methods: {
+    ...mapActions(["popupDisplay", "checkToken"])
+  },
+  mounted() {
+    this.checkToken();
+  }
+};
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+.v-dialog.v-dialog--active.v-dialog--persistent {
+  overflow: unset;
 }
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+.base_page_color {
+  background-color: #e9ebee !important;
 }
 </style>

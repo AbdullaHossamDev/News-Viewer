@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+import Favorite from "../views/Favorite.vue";
 
 Vue.use(VueRouter);
 
@@ -11,13 +12,10 @@ const routes = [
     component: Home
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
+    path: "/favorites",
+    name: "Fav",
+    component: Favorite,
+    beforeEnter: guardMyroute
   }
 ];
 
@@ -26,5 +24,22 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 });
+
+// router.beforeEach((to, from, next) => {
+//   if (to.name === "Fav" && !localStorage.getItem("token"))
+//     next({ name: "Home" });
+//   else next();
+// });
+
+function guardMyroute(to, from, next) {
+  var isAuthenticated = false;
+  if (localStorage.getItem("token")) isAuthenticated = true;
+  else isAuthenticated = false;
+  if (isAuthenticated) {
+    next(); // allow to enter route
+  } else {
+    next("/"); // go to '/login';
+  }
+}
 
 export default router;

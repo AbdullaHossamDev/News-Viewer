@@ -1,7 +1,11 @@
 # news-app
 
+
 ## Server project
+
 github: https://github.com/AbdullaHossamDev/News-Viewer-server
+
+App hit the server on port 8088
 
 ## Project setup
 ```

@@ -7,9 +7,7 @@ const getters = {};
 
 const actions = {
   register({ commit }, userData) {
-    // Axios.post("http://localhost:3000/user/register", userData)
-    // let sendData = { email: userData.email, name: userData.userName };
-    Axios.post("http://localhost:8000/api/user/register", userData)
+    Axios.post("http://localhost:8088/api/user/register", userData)
       .then(() => {
         commit("showPopup", {
           msgType: "Success",
@@ -46,8 +44,7 @@ const actions = {
   },
 
   login({ commit }, userData) {
-    // Axios.post("http://localhost:3000/user/login", userData)
-    Axios.post("http://localhost:8000/api/user/login", userData)
+    Axios.post("http://localhost:8088/api/user/login", userData)
       .then(response => {
         commit("chngLoginState", true);
         commit("login", response.data);
@@ -82,7 +79,7 @@ const actions = {
   },
 
   logout({ commit }) {
-    Axios.post("http://localhost:8000/api/user/logout")
+    Axios.post("http://localhost:8088/api/user/logout")
       .then(() => {
         localStorage.removeItem("token");
         localStorage.removeItem("name");
